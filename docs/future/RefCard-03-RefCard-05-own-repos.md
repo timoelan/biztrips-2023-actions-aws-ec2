@@ -74,6 +74,11 @@ Namenskonvention damit etabliert: `RefCard-<nn>-be-<Beschreibung>` /
   reicht ein lokales Volume in der Cloud nicht mehr").
 - Spring Boot Endpoint zum Hoch-/Runterladen von Bildern, Ablage auf einem
   gemounteten Volume.
+- **Entscheidung: eigene Repos** (`RefCard-04-be-...` / `RefCard-04-fe-...`),
+  analog zur mit RefCard 03 etablierten Namenskonvention. Begründung: hält
+  jede RefCard sauber abgegrenzt und einzeln taggbar (wie `v1-start`/
+  `v1-solution` in RefCard 02) statt Historie mehrerer Themen in einem
+  wachsenden Repo zu vermischen.
 
 ## RefCard 05 — Fullstack auf AWS (ECR, ECS, S3)
 
@@ -85,8 +90,13 @@ Namenskonvention damit etabliert: `RefCard-<nn>-be-<Beschreibung>` /
   einem.
 - Backend bekommt eine IAM-Rolle mit Zugriff nur auf den konkreten S3-Bucket
   (Least Privilege, gleiches Prinzip wie die OIDC-Rolle in EX-03).
-- Frontend bleibt ein reiner statischer Build; ob er über nginx-in-ECS oder
-  S3+CloudFront ausgeliefert wird, ist ein offener Punkt (siehe unten).
+- Frontend bleibt ein reiner statischer Build.
+- **Entscheidung: Auslieferung als nginx-Container in ECS**, nicht
+  S3+CloudFront. Begründung: konsistent zum in EX-02/EX-03 bereits
+  vermittelten Docker/ECS-Pattern; vermeidet, dass S3 innerhalb derselben
+  RefCard doppelt verwendet wird (einmal für Storage, einmal für Hosting);
+  und hält an der Regel "eine RefCard = ein neues Konzept" fest — CloudFront
+  wäre in RefCard 05 bereits das zweite neue Konzept neben S3.
 
 ### Lokale Entwicklung in RefCard 05
 
@@ -146,13 +156,7 @@ zwei konkrete Auswirkungen auf die Planung:
 
 ## Offene Punkte
 
-- Frontend-Auslieferung in RefCard 05: nginx-Container in ECS (konsistent zu
-  EX-02/EX-03) vs. S3+CloudFront (würde S3 doppelt nutzen — einmal für
-  Storage, einmal für Hosting — ggf. verwirrend für Studierende).
-- Ob RefCard 04 in den bestehenden RefCard-03-Repos weitergebaut wird oder
-  eigene `RefCard-04-be-...`/`RefCard-04-fe-...`-Repos bekommt (Namenskonvention
-  `RefCard-<nn>-be/fe-<Beschreibung>` ist mit RefCard 03 etabliert).
-- Soll EX-03 (dieses Repo) um einen Hinweis/Alternativ-Abschnitt zu
-  Learner-Lab-Zugangsdaten ergänzt werden, oder bleibt EX-03 bewusst bei
-  "echtem" OIDC als Referenz und der Learner-Lab-Fallback wird nur in
-  RefCard 05 dokumentiert?
+Aktuell keine offenen Punkte — die frühere Liste (Frontend-Auslieferung
+RefCard 05, Repo-Struktur RefCard 04, Learner-Lab-Hinweis in EX-03) ist
+entweder oben als Entscheidung festgehalten oder bereits umgesetzt: EX-03
+enthält den Exkurs "Fallback für AWS Academy Learner Lab" bereits.
